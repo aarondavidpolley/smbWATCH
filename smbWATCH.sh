@@ -15,6 +15,9 @@ user_name=`id -un $user_id`
 home_dir=`dscl . read /Users/"$user_name" NFSHomeDirectory | awk '{print $2}'`
 log_file="$home_dir/Library/Logs/smbWATCH.log"
 os_vers=`sw_vers -productVersion | awk -F "." '{print $2}'`
+ShareName="DPN"
+ShareIP="192.168.17.50"
+ShareDomain="server.dpn.com.au"
 
 #---Redirect output to log---#
 exec >> $log_file 2>&1
@@ -31,15 +34,9 @@ echo `date "+%a %b %d %H:%M:%S"` "     - OS Vers:           10.${os_vers}"
 
 echo `date "+%a %b %d %H:%M:%S"` " - Unmounting network volumes..."
 
-ShareName="DPN"
-
 smbSharesName=`mount | grep "smbfs" | grep "$ShareName" | awk '{print $1}'`
 
-ShareIP="192.168.17.50"
-
 smbSharesIP=`mount | grep "smbfs" | grep "$ShareIP" | awk '{print $1}'`
-
-ShareDomain="server.dpn.com.au"
 
 smbSharesDomain=`mount | grep "smbfs" | grep "$ShareDomain" | awk '{print $1}'`
 
