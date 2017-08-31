@@ -22,9 +22,12 @@ ShareDomain="server.dpn.com.au"
 #---Redirect output to log---#
 exec >> $log_file 2>&1
 
+
+#---User Alert---#
 #osascript -e "tell Application \"System Events\" to display alert\
 # \"Incorrect server connection detected, removing\""
 
+#---Script Start---#
 echo "*************************************************************************"
 echo `date "+%a %b %d %H:%M:%S"` " - smbWATCH beginning v${script_version}"
 echo `date "+%a %b %d %H:%M:%S"` "     - User:              $user_name"
@@ -32,31 +35,38 @@ echo `date "+%a %b %d %H:%M:%S"` "     - User ID:           $user_id"
 echo `date "+%a %b %d %H:%M:%S"` "     - Home Dir:          $home_dir"
 echo `date "+%a %b %d %H:%M:%S"` "     - OS Vers:           10.${os_vers}"
 
-echo `date "+%a %b %d %H:%M:%S"` " - Unmounting network volumes..."
+#--Check If Server Accessible---#
+if ping -q -c 1 -W 1 "$ShareIP" >/dev/null; then
 
-smbSharesName=`mount | grep "smbfs" | grep "$ShareName" | awk '{print $1}'`
+   echo " - Server IP is up"
 
-smbSharesIP=`mount | grep "smbfs" | grep "$ShareIP" | awk '{print $1}'`
+   echo `date "+%a %b %d %H:%M:%S"` " - Unmounting network volumes..."
 
-smbSharesDomain=`mount | grep "smbfs" | grep "$ShareDomain" | awk '{print $1}'`
+   smbSharesName=`mount | grep "smbfs" | grep "$ShareName" | awk '{print $1}'`
+
+   smbSharesIP=`mount | grep "smbfs" | grep "$ShareIP" | awk '{print $1}'`
+
+   smbSharesDomain=`mount | grep "smbfs" | grep "$ShareDomain" | awk '{print $1}'`
 
 
-#echo "Unmounting the following SMB Shares"
-
-for a in $smbSharesName ; do
+   for a in $smbSharesName ; do
             echo "Un-mounting $a"
             /sbin/umount -f "$a"
-done
+   done
 
-for b in $smbSharesIP ; do
+   for b in $smbSharesIP ; do
             echo "Un-mounting $b"
             /sbin/umount -f "$b"
-done
+   done
 
-for c in $smbSharesDomain ; do
+   for c in $smbSharesDomain ; do
             echo "Un-mounting $c"
             /sbin/umount -f "$c"
-done
+   done
+
+else
+   echo " - Server IP is down, nothing to do"
+fi
 
 
 echo `date "+%a %b %d %H:%M:%S"` " - Complete..."
