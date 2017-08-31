@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ################################################################################
-# Author: 	Aaron Polley                                                       #
-# Date:		30/08/2017                                                         #
-# Version:	0.04                                                               #
-# Purpose:  Scripting for monitoring and unmounting SMB drives                 #
-#           Should be triggered by LaunchAgent						           #
+# Author:    Aaron Polley                                                      #
+# Date:      30/08/2017                                                        #
+# Version:   0.04                                                              #
+# Purpose:   Scripting for monitoring and unmounting SMB drives                #
+#            Should be triggered by LaunchAgent                                #
 ################################################################################
 
 #---Variables and such---#
