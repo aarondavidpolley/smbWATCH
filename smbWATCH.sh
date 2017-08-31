@@ -3,13 +3,13 @@
 ################################################################################
 # Author:    Aaron Polley                                                      #
 # Date:      31/08/2017                                                        #
-# Version:   0.10                                                              #
+# Version:   0.11                                                              #
 # Purpose:   Scripting for monitoring and unmounting SMB drives                #
 #            Should be triggered by LaunchAgent using WatchPaths               #
 ################################################################################
 
 #---Variables and such---#
-script_version="0.10"
+script_version="0.11"
 user_id=`id -u`
 user_name=`id -un $user_id`
 home_dir=`dscl . read /Users/"$user_name" NFSHomeDirectory | awk '{print $2}'`
@@ -69,6 +69,9 @@ else
    echo "$DateTime - Server IP is down, nothing to do"
 fi
 
+echo "$DateTime - Pausing for 5 seconds..."
+
+sleep 5
 
 echo "$DateTime - Complete..."
 
