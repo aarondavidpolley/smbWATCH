@@ -3,13 +3,13 @@
 ################################################################################
 # Author:    Aaron Polley                                                      #
 # Date:      30/08/2017                                                        #
-# Version:   0.06                                                              #
+# Version:   0.10                                                              #
 # Purpose:   Scripting for monitoring and unmounting SMB drives                #
-#            Should be triggered by LaunchAgent                                #
+#            Should be triggered by LaunchAgent using WatchPaths               #
 ################################################################################
 
 #---Variables and such---#
-script_version="0.04"
+script_version="0.10"
 user_id=`id -u`
 user_name=`id -un $user_id`
 home_dir=`dscl . read /Users/"$user_name" NFSHomeDirectory | awk '{print $2}'`
@@ -40,7 +40,7 @@ if ping -q -c 1 -W 1 "$ShareIP" >/dev/null; then
 
    echo `date "+%a %b %d %H:%M:%S"` " - Server IP is up"
 
-   echo `date "+%a %b %d %H:%M:%S"` " - Unmounting network volumes..."
+   echo `date "+%a %b %d %H:%M:%S"` " - Looking for $ShareName SMB volumes..."
 
    smbSharesName=`mount | grep "smbfs" | grep "$ShareName" | awk '{print $1}'`
 
