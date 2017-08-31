@@ -15,6 +15,7 @@ user_name=`id -un $user_id`
 home_dir=`dscl . read /Users/"$user_name" NFSHomeDirectory | awk '{print $2}'`
 log_file="$home_dir/Library/Logs/smbWATCH.log"
 os_vers=`sw_vers -productVersion | awk -F "." '{print $2}'`
+DateTime=`date "+%a %b %d %H:%M:%S"`
 ShareName="DPN"
 ShareIP="192.168.17.50"
 ShareDomain="server.dpn.com.au"
@@ -29,18 +30,18 @@ exec >> $log_file 2>&1
 
 #---Script Start---#
 echo "*************************************************************************"
-echo `date "+%a %b %d %H:%M:%S"` " - smbWATCH beginning v${script_version}"
-echo `date "+%a %b %d %H:%M:%S"` "     - User:              $user_name"
-echo `date "+%a %b %d %H:%M:%S"` "     - User ID:           $user_id"
-echo `date "+%a %b %d %H:%M:%S"` "     - Home Dir:          $home_dir"
-echo `date "+%a %b %d %H:%M:%S"` "     - OS Vers:           10.${os_vers}"
+echo "$DateTime - smbWATCH beginning v${script_version}"
+echo "$DateTime     - User:              $user_name"
+echo "$DateTime     - User ID:           $user_id"
+echo "$DateTime     - Home Dir:          $home_dir"
+echo "$DateTime     - OS Vers:           10.${os_vers}"
 
 #--Check If Server Accessible---#
 if ping -q -c 1 -W 1 "$ShareIP" >/dev/null; then
 
-   echo `date "+%a %b %d %H:%M:%S"` " - Server IP is up"
+   echo "$DateTime - Server IP is up"
 
-   echo `date "+%a %b %d %H:%M:%S"` " - Looking for $ShareName SMB volumes..."
+   echo "$DateTime - Looking for $ShareName SMB volumes..."
 
    smbSharesName=`mount | grep "smbfs" | grep "$ShareName" | awk '{print $1}'`
 
@@ -65,11 +66,11 @@ if ping -q -c 1 -W 1 "$ShareIP" >/dev/null; then
    done
 
 else
-   echo `date "+%a %b %d %H:%M:%S"` " - Server IP is down, nothing to do"
+   echo "$DateTime - Server IP is down, nothing to do"
 fi
 
 
-echo `date "+%a %b %d %H:%M:%S"` " - Complete..."
+echo "$DateTime - Complete..."
 
 echo "*************************************************************************"
 
