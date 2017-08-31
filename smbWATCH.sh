@@ -2,7 +2,7 @@
 
 ################################################################################
 # Author:    Aaron Polley                                                      #
-# Date:      30/08/2017                                                        #
+# Date:      31/08/2017                                                        #
 # Version:   0.10                                                              #
 # Purpose:   Scripting for monitoring and unmounting SMB drives                #
 #            Should be triggered by LaunchAgent using WatchPaths               #
