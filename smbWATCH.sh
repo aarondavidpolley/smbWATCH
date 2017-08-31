@@ -3,7 +3,7 @@
 ################################################################################
 # Author:    Aaron Polley                                                      #
 # Date:      30/08/2017                                                        #
-# Version:   0.04                                                              #
+# Version:   0.06                                                              #
 # Purpose:   Scripting for monitoring and unmounting SMB drives                #
 #            Should be triggered by LaunchAgent                                #
 ################################################################################
@@ -38,7 +38,7 @@ echo `date "+%a %b %d %H:%M:%S"` "     - OS Vers:           10.${os_vers}"
 #--Check If Server Accessible---#
 if ping -q -c 1 -W 1 "$ShareIP" >/dev/null; then
 
-   echo " - Server IP is up"
+   echo `date "+%a %b %d %H:%M:%S"` " - Server IP is up"
 
    echo `date "+%a %b %d %H:%M:%S"` " - Unmounting network volumes..."
 
@@ -65,7 +65,7 @@ if ping -q -c 1 -W 1 "$ShareIP" >/dev/null; then
    done
 
 else
-   echo " - Server IP is down, nothing to do"
+   echo `date "+%a %b %d %H:%M:%S"` " - Server IP is down, nothing to do"
 fi
 
 
