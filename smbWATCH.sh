@@ -2,23 +2,27 @@
 
 ################################################################################
 # Author:    Aaron Polley                                                      #
-# Date:      31/08/2017                                                        #
-# Version:   0.11                                                              #
+# Date:      16/10/2017                                                        #
+# Version:   0.12                                                              #
 # Purpose:   Scripting for monitoring and unmounting SMB drives                #
 #            Should be triggered by LaunchAgent using WatchPaths               #
 ################################################################################
 
 #---Variables and such---#
-script_version="0.11"
+script_version="0.12"
 user_id=`id -u`
 user_name=`id -un $user_id`
 home_dir=`dscl . read /Users/"$user_name" NFSHomeDirectory | awk '{print $2}'`
 log_file="$home_dir/Library/Logs/smbWATCH.log"
 os_vers=`sw_vers -productVersion | awk -F "." '{print $2}'`
 DateTime=`date "+%a %b %d %H:%M:%S"`
-ShareName="DPN"
-ShareIP="192.168.17.50"
-ShareDomain="server.dpn.com.au"
+
+#---Variables To Change---#
+#These represent the different ways to connect to a network volume, over Bonjour, IP, or Hostname#
+
+ShareName="SERVER" #Bonjour Sharing Name or just part of it#
+ShareIP="10.9.8.7" #IP Address of server#
+ShareDomain="server.company.com" #Hostname of server#
 
 #---Redirect output to log---#
 exec >> $log_file 2>&1
