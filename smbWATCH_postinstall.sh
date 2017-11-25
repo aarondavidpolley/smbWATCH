@@ -2,13 +2,13 @@
 
 ################################################################################
 # Author:    Aaron Polley                                                      #
-# Date:      31/08/2017                                                        #
-# Version:   0.02                                                              #
+# Date:      25/11/2017                                                        #
+# Version:   1.0                                                              #
 # Purpose:   Post install script for smbWatch                                  #
 ################################################################################
 
 #---Variables and such---#
-script_version="0.02"
+script_version="1.0"
 user_id=`id -u`
 user_name=`id -un $user_id`
 home_dir=`dscl . read /Users/"$user_name" NFSHomeDirectory | awk '{print $2}'`

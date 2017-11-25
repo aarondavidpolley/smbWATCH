@@ -3,13 +3,18 @@
 ################################################################################
 # Author:    Aaron Polley                                                      #
 # Date:      16/10/2017                                                        #
-# Version:   0.12                                                              #
+# Version:   1.0                                                              #
 # Purpose:   Scripting for monitoring and unmounting SMB drives                #
 #            Should be triggered by LaunchAgent using WatchPaths               #
 ################################################################################
 
-#---Variables and such---#
-script_version="0.12"
+#---Variables To Edit---#
+ServerName="NAS"       #Specify the server sharing/bonjour name
+ServerIP="10.9.8.7"       #Specify the server IP
+ServerDomain="server.mycompany.private"       #Specify the server DNS name/hostname
+
+#---Logic Variables---#
+script_version="1.0"
 user_id=`id -u`
 user_name=`id -un $user_id`
 home_dir=`dscl . read /Users/"$user_name" NFSHomeDirectory | awk '{print $2}'`
@@ -17,41 +22,34 @@ log_file="$home_dir/Library/Logs/smbWATCH.log"
 os_vers=`sw_vers -productVersion | awk -F "." '{print $2}'`
 DateTime=`date "+%a %b %d %H:%M:%S"`
 
-#---Variables To Change---#
-#These represent the different ways to connect to a network volume, over Bonjour, IP, or Hostname#
-
-ShareName="SERVER" #Bonjour Sharing Name or just part of it#
-ShareIP="10.9.8.7" #IP Address of server#
-ShareDomain="server.company.com" #Hostname of server#
-
 #---Redirect output to log---#
 exec >> $log_file 2>&1
 
 
-#---User Alert---#
-#osascript -e "tell Application \"System Events\" to display alert\
-# \"Incorrect server connection detected, removing\""
-
 #---Script Start---#
+
+if [[ $1 = "debug" ]]; then
 echo "*************************************************************************"
 echo "$DateTime - smbWATCH beginning v${script_version}"
 echo "$DateTime     - User:              $user_name"
 echo "$DateTime     - User ID:           $user_id"
 echo "$DateTime     - Home Dir:          $home_dir"
 echo "$DateTime     - OS Vers:           10.${os_vers}"
+fi
 
 #--Check If Server Accessible---#
-if ping -q -c 1 -W 1 "$ShareIP" >/dev/null; then
+if ping -q -c 1 -W 1 "$ServerIP" >/dev/null; then
 
+  if [[ $1 = "debug" ]]; then
    echo "$DateTime - Server IP is up"
+   echo "$DateTime - Looking for $ServerName SMB volumes..."
+  fi
 
-   echo "$DateTime - Looking for $ShareName SMB volumes..."
+   smbSharesName=`mount | grep "smbfs" | grep "$ServerName" | awk '{print $1}'`
 
-   smbSharesName=`mount | grep "smbfs" | grep "$ShareName" | awk '{print $1}'`
+   smbSharesIP=`mount | grep "smbfs" | grep "$ServerIP" | awk '{print $1}'`
 
-   smbSharesIP=`mount | grep "smbfs" | grep "$ShareIP" | awk '{print $1}'`
-
-   smbSharesDomain=`mount | grep "smbfs" | grep "$ShareDomain" | awk '{print $1}'`
+   smbSharesDomain=`mount | grep "smbfs" | grep "$ServerDomain" | awk '{print $1}'`
 
 
    for a in $smbSharesName ; do
@@ -70,15 +68,20 @@ if ping -q -c 1 -W 1 "$ShareIP" >/dev/null; then
    done
 
 else
+  if [[ $1 = "debug" ]]; then
    echo "$DateTime - Server IP is down, nothing to do"
+  fi
 fi
 
-echo "$DateTime - Pausing for 5 seconds..."
+if [[ $1 = "debug" ]]; then
+  echo "$DateTime - Pausing for 5 seconds..."
+fi
 
 sleep 5
 
+if [[ $1 = "debug" ]]; then
 echo "$DateTime - Complete..."
-
 echo "*************************************************************************"
+fi
 
 exit 0
