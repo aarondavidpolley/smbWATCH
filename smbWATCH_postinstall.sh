@@ -2,8 +2,8 @@
 
 ################################################################################
 # Author:    Aaron Polley                                                      #
-# Date:      25/11/2017                                                        #
-# Version:   1.0                                                              #
+# Date:      21/03/2019                                                       #
+# Version:   1.0.1                                                              #
 # Purpose:   Post install script for smbWatch                                  #
 ################################################################################
 
@@ -42,8 +42,8 @@ echo "$DateTime     - LoadUser:          $currentUser"
         uid=$(echo $pid_uid | cut -d, -f2)
         # Replace echo with e.g. launchctl load.
         launchctl asuser "$uid" chroot -u "$uid" / echo "$DateTime - Executing postinstall for $uid"
-        launchctl asuser "$uid" chroot -u "$uid" / launchctl unload /Library/LaunchAgents/com.max.smbwatch.plist
-        launchctl asuser "$uid" chroot -u "$uid" / launchctl load -w /Library/LaunchAgents/com.max.smbwatch.plist
+        launchctl asuser "$uid" chroot -u "$uid" / launchctl unload /Library/LaunchAgents/com.github.aarondavidpolley.smbWATCH.plist
+        launchctl asuser "$uid" chroot -u "$uid" / launchctl load -w /Library/LaunchAgents/com.github.aarondavidpolley.smbWATCH.plist
     done
 
 echo "$DateTime - Complete..."
